@@ -23,7 +23,7 @@ public class Ejercicio3 {
 			System.out.print("> ");
 			Scanner teclado = new Scanner(br.readLine());
 			int estado = 0;
-			String token;
+			String token = null;
 			while(estado != 7) {
 				switch(estado) {
 					case 0:
@@ -45,7 +45,6 @@ public class Ejercicio3 {
 						try {
 							ip = teclado.skip("((\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5]).){3}(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])\\)").match().group();
 							estado = 2;					
-							//(?:(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5]).){3}(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])A
 						} catch (NoSuchElementException e) {
 								System.out.println("Se esperaba una dirección ip válida");
 							estado = 7;
@@ -115,6 +114,20 @@ public class Ejercicio3 {
 			}
 		}while (!fin);
 		
-	
+		for(Entry<String, Map<String, Integer>> usuarios: usuariosIp.entrySet()) {
+			int numIp = 0; //contador para el número de ips
+			int totalMensajes = 0; //contador para el total de mensajes
+			String nombreUsuario = usuarios.getKey();
+			System.out.println(nombreUsuario+":");
+			
+			for (Entry<String, Integer> ips: usuariosIp.get(nombreUsuario).entrySet()) {
+				System.out.print(ips.getKey() + "=> " +ips.getValue() + ", ");
+				numIp++;
+				totalMensajes = totalMensajes + ips.getValue();		
+			}
+			System.out.println();
+			System.out.println("Número de IPs: " + numIp);
+			System.out.println("Total de mensajes: " + totalMensajes);
+		}
 	}
 }
