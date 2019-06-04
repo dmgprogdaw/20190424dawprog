@@ -3,6 +3,7 @@ package examen.ejercicio3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,6 +18,8 @@ public class Ejercicio3 {
 		Map<String, Map<String, Integer>> usuariosIp = new HashMap<>();
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int mensajes = 0; //contador para los mensajes por ip
+		int numIp = 0; //contador para el número de ips
+		int totalMensajes = 0; //contador para el total de mensajes
 		String ip = null , mensaje = null, usuario = null, linea;
 		boolean fin = false;
 		do {
@@ -104,7 +107,7 @@ public class Ejercicio3 {
 								usuariosIp.put(usuario, new HashMap<>());
 								usuariosIp.get(usuario).put(ip, mensajes);																	
 							}
-							estado = 0;
+							estado = 7;
 						} catch (NoSuchElementException e) {
 							System.out.println("Se esperaba un ')'");
 							estado = 7;
@@ -114,20 +117,26 @@ public class Ejercicio3 {
 			}
 		}while (!fin);
 		
-		for(Entry<String, Map<String, Integer>> usuarios: usuariosIp.entrySet()) {
-			int numIp = 0; //contador para el número de ips
-			int totalMensajes = 0; //contador para el total de mensajes
-			String nombreUsuario = usuarios.getKey();
-			System.out.println(nombreUsuario+":");
+		
+		Iterator<Map.Entry<String, Map<String, Integer>>> mapa = usuariosIp.entrySet().iterator();
+		while (mapa.hasNext()) {
+			Map.Entry<String, Map<String, Integer>> entrada1 = mapa.next();		
+			String nombreUsuario = entrada1.getKey();
+			System.out.println(nombreUsuario + ":");
 			
-			for (Entry<String, Integer> ips: usuariosIp.get(nombreUsuario).entrySet()) {
-				System.out.print(ips.getKey() + "=> " +ips.getValue() + ", ");
+			Iterator<Entry<String, Integer>> mapa2 = usuariosIp.get(nombreUsuario).entrySet().iterator();
+			while (mapa2.hasNext()) {
+				Map.Entry<String, Integer> ips = mapa2.next();
+				if (mapa2.hasNext()) 
+					System.out.print(ips.getKey() + "=> " +ips.getValue() + ", ");
+				else
+					System.out.print(ips.getKey() + "=> " +ips.getValue() + " ");
 				numIp++;
 				totalMensajes = totalMensajes + ips.getValue();		
 			}
-			System.out.println();
-			System.out.println("Número de IPs: " + numIp);
-			System.out.println("Total de mensajes: " + totalMensajes);
 		}
-	}
+		System.out.println();
+		System.out.println("Número de IPs: " + numIp);
+		System.out.println("Total de mensajes: " + totalMensajes);
+	}	
 }
